@@ -7,6 +7,9 @@ const channelID = 'CHANNEL_ID_HERE'; // Replace with the ID of the channel you w
 const webhookID = 'WEBHOOK_ID_HERE'; // Replace with the ID of your webhook
 const webhookToken = 'WEBHOOK_TOKEN_HERE'; // Replace with your webhook token
 
+// Store previously sent article titles
+let sentTitles = [];
+
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
   
@@ -29,15 +32,20 @@ client.on('ready', () => {
         // Create message with sorted news titles
         let message = '';
         articles.forEach(article => {
-          message += `${article.title}\n`;
+          if (!sentTitles.includes(article.title)) { // Check if title has already been sent
+            message += `${article.title}\n`;
+            sentTitles.push(article.title); // Add title to list of sent titles
+          }
         });
 
         // Send message to Discord channel using webhook
-        const webhookClient = new Discord.WebhookClient(webhookID, webhookToken);
-        webhookClient.send(message, {
-          username: 'Anime News Bot',
-          avatarURL: 'https://i.imgur.com/yW8jMwB.png'
-        });
+        if (message.length > 0) { // Check if there are new articles to send
+          const webhookClient = new Discord.WebhookClient(webhookID, webhookToken);
+          webhookClient.send(message, {
+            username: 'Anime News Bot',
+            avatarURL: 'https://i.imgur.com/yW8jMwB.png'
+          });
+        }
       })
       .catch(error => {
         console.log(error);
