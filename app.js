@@ -1,4 +1,3 @@
-const axios = require('axios');
 const cheerio = require('cheerio');
 const Discord = require('discord.js');
 
@@ -45,6 +44,10 @@ client.on('ready', () => {
             username: 'Anime News Bot',
             avatarURL: 'https://i.imgur.com/yW8jMwB.png'
           });
+
+          // Send a DM to a specific user to notify them of the new articles
+          const user = client.users.cache.get('USER_ID_HERE'); // Replace with the ID of the user you want to notify
+          user.send(`New articles:\n${message}`);
         }
       })
       .catch(error => {
@@ -53,4 +56,4 @@ client.on('ready', () => {
   }, 60000); // Send messages every minute
 });
 
-client.login('BOT_TOKEN_HERE'); // Replace with your Discord bot token
+client.login('BOT_TOKEN_HERE'); // Replace with your Discord bot token```
